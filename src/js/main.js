@@ -1,5 +1,36 @@
 var canvas, context, entities = [], playerEntity, clickHandlers = [];
 var shouldRender = true;
+
+// player start = 1
+	// Block = 2
+	// Empty = 0
+	var level = [
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0],
+		[0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,2,0,0,0,0,0,0,0],
+		[0,0,1,0,0,0,0,0,0,0,0,0,2,0,0,2,0,0,0,0,0,0,0],
+		[2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2],
+	];
+
 init();
 render();
 
@@ -8,18 +39,31 @@ function init() {
 	context = canvas.getContext("2d");
 	playerEntity = new PlayerObj(canvas);
 	entities.push(playerEntity);
+	level.forEach(function(row, rowIndex) {
+		row.forEach(function(cell, cellIndex) {
+			context.fillStyle = "#00FF00";
+			if(cell == 1) playerEntity.setPosition(cellIndex*30, rowIndex*30);
+		});
+	});
 	canvas.addEventListener("click", onClick, false);
 }
 
 function startOver() {
 	entities = [];
 	entities.push(playerEntity);
+	level.forEach(function(row, rowIndex) {
+		row.forEach(function(cell, cellIndex) {
+			context.fillStyle = "#00FF00";
+			if(cell == 1) playerEntity.setPosition(cellIndex*30, rowIndex*30);
+		});
+	});
 }
 
 
 function render() {
 	clearCanvas()
 	drawBackground();
+	drawLevel();
 	entities.every((entity, index, object) => {
 		entity.render(context);
 		return true;
@@ -27,6 +71,15 @@ function render() {
 	if (shouldRender) {
 		window.requestAnimationFrame(render);
 	}
+}
+
+function drawLevel() {
+	level.forEach(function(row, rowIndex) {
+		row.forEach(function(cell, cellIndex) {
+			context.fillStyle = "#00FF00";
+			if(cell == 2) context.fillRect(cellIndex*30, rowIndex*30, 30, 30);
+		});
+	});
 }
 
 function drawBackground() {
