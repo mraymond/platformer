@@ -79,6 +79,11 @@ class PlayerObj extends EntityObj {
 		}
 	}
 	
+	setPosition(x,y) {
+		this.x = x;
+		this.y = y;
+	}
+	
 	render(context) {
 		this.move();
 		this.checkBounds(0);
